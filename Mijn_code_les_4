@@ -41,3 +41,95 @@ def sort(list):
     sort(low)
     sort(high)
     return [low] + [pivot] + [high]
+
+import heapq
+from functools import total_ordering
+
+@total_ordering
+class SpecialSorted:
+
+    def __init__(self, element, value):
+        self.element = element
+        self.value = value
+
+    def __eq__(self, other):
+        return self.value == other.value
+
+    def __ne__(self, other):
+        return self.value != other.value
+
+    def __lt__(self, other):
+        return self.value < other.value
+
+class PriorityQueue:
+
+    def __init__(self, sortkey = lambda x : x):
+        self.content = []
+        self.sortkey = sortkey
+
+    def add(self, item):
+        heapq.heappush(self.content, SpecialSorted(item, self.sortkey(item)))
+
+    def peek(self):
+        return self.content[0].element if self.content else None
+
+    def poll(self):
+        return heapq.heappop(self.content).element if len(self.content) > 0 else None
+
+    def is_empty(self):
+        return len(self.content) == 0
+
+    def __str__(self):
+        return str(heapq.nsmallest(len(self.content), [item.element for item in self.content]))
+
+import os
+
+# Print de huidige werkdirectory
+print("Current working directory:", os.getcwd())
+
+# Lijst alle bestanden in die directory
+print("Bestanden in deze directory:", os.listdir())
+
+
+
+
+def shortest_path(graph, src, dest):
+    from math import inf
+
+    dist = {node: inf for node in graph.get_all_nodes()}
+    prev = {node: None for node in graph.get_all_nodes()}
+    dist[src] = 0
+
+    pq = PriorityQueue(sortkey=lambda node: dist[node])
+    pq.add(src)
+
+    visited = set()
+
+    while not pq.is_empty():
+        u = pq.poll()
+        if u in visited:
+            continue
+        visited.add(u)
+
+        if u == dest:
+            break
+
+        for edge in graph.get_outgoing_edges(u):
+            v = edge.get_destination()
+            w = edge.weight if edge.weight is not None else 1
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                prev[v] = u
+                pq.add(v)
+
+    if dist[dest] == inf:
+        return None  # <-- geen pad
+
+    # Reconstrueer pad
+    path = []
+    node = dest
+    while node is not None:
+        path.append(node)
+        node = prev[node]
+    path.reverse()
+    return path
