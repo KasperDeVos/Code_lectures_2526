@@ -1,0 +1,71 @@
+def zoek(gesorteerd: list, x: int):
+    for i in range (0, len(gesorteerd)):
+        if gesorteerd[i] == x:
+            return i
+    return None
+
+def combisom(getallen: list, x: int):
+    for i in range(len(getallen)):
+        for j in range(i + 1, len(getallen)):  # i+1 zodat je niet hetzelfde getal dubbel pakt
+            if getallen[i] + getallen[j] == x:
+                return True
+    return False
+
+def samenvoegen(reeks_1: list, reeks_2: list):
+    max = min(len(reeks_1), len(reeks_2))
+    reeks_3= []
+    for i in range(max):
+        reeks_3.append(reeks_1[i])
+        reeks_3.append(reeks_2[i])
+    return reeks_3
+
+def weven(reeks_1: list, reeks_2: list):
+    lengte = max(len(reeks_1), len(reeks_2))
+    reeks_3 = []
+    for i in range(lengte):
+        reeks_3.append(reeks_1[i % len(reeks_1)])
+        reeks_3.append(reeks_2[i % len(reeks_2)])
+    return reeks_3
+
+def ritsen(reeks_1: list, reeks_2: list):
+    lengte = max(len(reeks_1), len(reeks_2))
+    speciaal = min(len(reeks_1), len(reeks_2))
+    reeks_3 = []
+    for i in range(speciaal):
+        reeks_3.append(reeks_1[i])
+        reeks_3.append(reeks_2[i])
+    for i in range(speciaal, lengte):
+        if len(reeks_1) > speciaal:
+            reeks_3.append(reeks_1[i])
+        else:
+            reeks_3.append(reeks_2[i])
+    return reeks_3
+
+def iszigzag(lijst: list):
+    for i in range(1, len(lijst)):
+        if i % 2 == 0:
+            if lijst[i-1] > lijst[i]:
+                return False
+        else:
+            if lijst[i] > lijst[i - 1]:
+                return False
+    return True
+def zigzag_traag(lijst: list):
+    lijst.sort()
+    for i in range(len(lijst)-1):
+        if i % 2 == 0:
+            lijst[i], lijst[i+1] = lijst[i+1], lijst[i]
+
+def zigzag_snel(lijst: list):
+    for i in range(len(lijst)):
+        if i == 0:
+            if lijst[i] < lijst[i+1]:
+                lijst[i], lijst[i+1] = lijst[i+1], lijst[i]
+        elif i % 2 == 0 and i == len(lijst) - 1:
+            if lijst[i] < lijst[i - 1]:
+                lijst[i], lijst[i - 1] = lijst[i - 1], lijst[i]
+        elif i % 2 == 0:
+            if lijst[i] < lijst[i-1]:
+                lijst[i], lijst[i-1] = lijst[i-1], lijst[i]
+            if lijst[i] < lijst[i+1]:
+                lijst[i], lijst[i+1] = lijst[i+1], lijst[i]
