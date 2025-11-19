@@ -1,0 +1,43 @@
+def mergesort(list):
+    if len(list) > 1:
+        first_half = list[:(len(list)//2)]
+        second_half = list[(len(list)//2):]
+        mergesort(first_half)
+        mergesort(second_half)
+        merge(first_half, second_half, list)
+        return list
+
+def merge(first_half, second_half, list):
+    current1, current2, current3 = 0, 0, 0
+    while current1 < len(first_half) and current2 < len(second_half) and current3 < len(list):
+        if first_half[current1] < second_half[current2]:
+            list[current3] = first_half[current1]
+            current1 += 1
+            current3 += 1
+        else:
+            list[current3] = second_half[current2]
+            current2 += 1
+            current3 += 1
+    while current1 < len(first_half):
+        list[current3] = first_half[current1]
+        current1 += 1
+        current3 += 1
+    while current2 < len(second_half):
+        list[current3] = second_half[current2]
+        current2 += 1
+        current3 += 1
+    return list
+
+def sort(list):
+    low = []
+    high = []
+    if len(list) > 1:
+        pivot = list[0]
+        for i in range(1,len(list)):
+            if list[i] < pivot:
+                low.append(list[i])
+            else:
+                high.append(list[i])
+    sort(low)
+    sort(high)
+    return [low] + [pivot] + [high]
