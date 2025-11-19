@@ -1,0 +1,63 @@
+def faculteit_rec(n):
+    if n == 0:
+        return 1
+    else:
+        return n * faculteit_rec(n-1)
+
+def faculteit(n):
+    i = 1
+    result = 1
+    while i <= n:
+        result = result * i
+        i += 1
+    return result
+
+def faculteit2(n):
+    result = 1
+    for i in range(1, n + 1):
+        result = result * i
+    return result
+
+aantal_testen = int(input("aantal testen"))
+for i in range(aantal_testen):
+    getal = int(input("getal?"))
+    if getal > 13:
+        print("input too large")
+    else:
+        print(faculteit_rec(getal))
+
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        result = fib(n-1) + fib(n-2)
+        return result
+
+def isPalindrome(s):
+    if len(s) <= 1:
+        return True
+    elif s[0] != s[len(s) - 1]:
+        return False
+    else:
+        return isPalindrome(s[1 : len(s) - 1])
+
+
+def hanoi(n):
+    beweging(n, 'A', 'C', 'B')
+    print(stappen, "stappen gedaan")
+
+
+def beweging(n, Starttoren, Eindtoren, Hulptoren):
+    stappen = 0
+    if n == 1:
+        print("Schijf", n, "van", Starttoren, "naar", Eindtoren)
+        stappen += 1
+        return stappen
+    else:
+        beweging(n-1, Starttoren, Hulptoren, Eindtoren)
+        print("Schijf", n, "van", Starttoren, "naar", Eindtoren)
+        stappen += 1
+        beweging(n-1, Hulptoren, Eindtoren, Starttoren)
+        return stappen
