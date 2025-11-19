@@ -1,0 +1,170 @@
+numlist = [ 100, 101, 0, "103", 104 ]
+
+try:
+    i1 = int( input( "Give an index: " ) )
+    print( "100 /", numlist[i1], "=", 100 / numlist[i1] )
+except ZeroDivisionError:
+    print("Fout: niet delen door 0")
+except TypeError:
+    print("Fout: Gelieve een getal in te geven")
+except IndexError:
+    print("Fout: Gelieve een index tussen 0 en 4 in te geven")
+except ValueError:
+    print("Fout: Gelieve een geheel getal in te geven")
+
+def woorden_splitsen(bestandsnaam):
+    inputFile = open(bestandsnaam, 'r')
+    tekst = inputFile.read()
+    for p in tekst:
+        if p == "." or p == "," or p == "?":
+            tekst = tekst.replace(p,"")
+    woorden = list(tekst.split())
+    return woorden
+def woorden_tellen(bestandsnaam):
+    inputFile = open(bestandsnaam, 'r')
+    tekst = inputFile.read()
+    tekst = tekst.lower()
+    for p in tekst:
+        if p == "." or p == "," or p == "?":
+            tekst = tekst.replace(p,"")
+    woorden = tekst.split()
+    woord_freq = {}
+    for w in woorden:
+        if w in woord_freq:
+            woord_freq[w] += 1
+        else:
+            woord_freq[w] = 1
+
+    return woord_freq
+
+def overzicht(bestand):
+    inputFile = open(bestand, 'r')
+    tekst = inputFile.read()
+    codes = tekst.split(",")
+    Engelstalige_landen = 0
+    Franstalige_landen = 0
+    Duitstalige_landen = 0
+    Japan = 0
+    Russischtalige_landen = 0
+    China = 0
+    Overige_landen = 0
+    Fouten = 0
+    for code in codes:
+        if code[0:2] == "978" or code[0:2] == "979":
+            if code[3] == "1" or code[3] == "0":
+                Engelstalige_landen += 1
+            elif code[3] == "2":
+                Franstalige_landen += 1
+            elif code[3] == "3":
+                Duitstalige_landen += 1
+            elif code[3] == "4":
+                Japan += 1
+            elif code[3] == "5":
+                Russischtalige_landen += 1
+            elif code[3] == "7":
+                China += 1
+            else:
+                Overige_landen += 1
+
+        else:
+            Fouten += 1
+    print("Engelstalige landen: ", Engelstalige_landen)
+    print("Franstalige landen: ", Franstalige_landen)
+    print("Duitstalige landen: ", Duitstalige_landen)
+    print("Japan: ", Japan)
+    print("Russischtalige landen: ", Russischtalige_landen)
+    print("China: ", China)
+    print("Overige landen: ", Overige_landen)
+    print("Fouten: ", Fouten)
+
+def dubbel(lijst):
+    for x in lijst:
+        if lijst.count(x) == 2:
+            return x
+    return None
+
+
+def dubbels(lijst):
+    een_keer = set()
+    meer = set()
+
+    for x in lijst:
+        if lijst.count(x) == 1:
+            een_keer.add(x)
+        elif lijst.count(x) > 1:
+            meer.add(x)
+
+    return een_keer, meer
+
+
+def bloodgroup_child(vader, moeder):
+    vader_ABO, vader_Rh = vader[:-1], vader[-1]
+    moeder_ABO, moeder_Rh = moeder[:-1], moeder[-1]
+    bloedgroep_allelen = {
+        'A': ['A', 'O'],
+        'B': ['B', 'O'],
+        'AB': ['A', 'B'],
+        'O': ['O']
+    }
+    rh_allelen = {
+        '+': ['+', '-'],
+        '-': ['-']
+    }
+    mogelijke_kind_bloedgroepen = set()
+    for v in bloedgroep_allelen[vader_ABO]:
+        for m in bloedgroep_allelen[moeder_ABO]:
+            comb_ABO = sorted([v, m])
+            if comb_ABO == ['A', 'A'] or comb_ABO == ['A', 'O']:
+                abo_kind = 'A'
+            elif comb_ABO == ['B', 'B'] or comb_ABO == ['B', 'O']:
+                abo_kind = 'B'
+            elif comb_ABO == ['A', 'B']:
+                abo_kind = 'AB'
+            elif comb_ABO == ['O', 'O']:
+                abo_kind = 'O'
+            for r_v in rh_allelen[vader_Rh]:
+                for r_m in rh_allelen[moeder_Rh]:
+                    if '+' in [r_v, r_m]:
+                        rh_kind = '+'
+                    else:
+                        rh_kind = '-'
+
+                    mogelijke_kind_bloedgroepen.add(abo_kind + rh_kind)
+
+    return mogelijke_kind_bloedgroepen
+
+def bloedgroep_ouder(ouder, kind):
+    abo_genotypes = {
+        'A': [('A', 'A'), ('A', 'O')],
+        'B': [('B', 'B'), ('B', 'O')],
+        'AB': [('A', 'B')],
+        'O': [('O', 'O')]
+    }
+    rh_genotypes = {
+        '+': [('+', '+'), ('+', '-')],
+        '-': [('-', '-')]
+    }
+    alle_abo = ['A', 'B', 'AB', 'O']
+    alle_rh = ['+', '-']
+
+    def kinderen_van(ouder1, ouder2):
+        mogelijke_kinderen = set()
+        for (a1, a2) in abo_genotypes[ouder1[:-1]]:
+            for (b1, b2) in abo_genotypes[ouder2[:-1]]:
+                for gen1 in (a1, a2):
+                    for gen2 in (b1, b2):
+                        gen = {gen1, gen2}
+                        if gen == {'A', 'B'}:
+                            abo = 'AB'
+                        elif 'A' in gen and 'B' not in gen:
+                            abo = 'A'
+                        elif 'B' in gen and 'A' not in gen:
+                            abo = 'B'
+                        else:
+                            abo = 'O'
+                        # Rh-deel
+                        for (r1a, r1b) in rh_genotypes[ouder1[-1]]:
+                            for (r2a, r2b) in rh_genotypes[ouder2[-1]]:
+                                rh = '+' if '+' in (r1a, r1b, r2a, r2b) else '-'
+                                mogelijke_kinderen.add(abo + rh)
+        return mogelijke_kinderen
